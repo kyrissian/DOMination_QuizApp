@@ -1,3 +1,11 @@
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 const quizData = [
   {
     question: "What is the correct syntax to declare a variable in JavaScript?",
@@ -42,6 +50,7 @@ const quizData = [
   },
 ];
 
+let shuffledQuiz = shuffle([...quizData]);
 let currentQuestionIndex = 0;
 let score = 0;
 
@@ -53,56 +62,108 @@ const scoreText = document.getElementById("score-text");
 const quizContainer = document.getElementById("quiz-container");
 const restartButton = document.getElementById("restart");
 
+quizContainer.style.display = "block";
+scoreContainer.style.display = "none";
+
 function loadQuestion() {
-  const currentQuestion = quizData[currentQuestionIndex];
+  const currentQuestion = shuffledQuiz[currentQuestionIndex];
 
   questionEl.textContent = currentQuestion.question;
 
   choicesContainer.innerHTML = "";
+  nextButton.disabled = true;
 
-  currentQuestion.options.forEach((option, index) => {
+  // build answer objects with correctness
+  let options = currentQuestion.options.map((option, index) => {
+    return {
+      text: option,
+      isCorrect: index === currentQuestion.answer,
+    };
+  });
+
+  // shuffle answers
+  shuffle(options);
+
+  options.forEach((optionObj) => {
     const button = document.createElement("button");
-    button.textContent = option;
+    button.textContent = optionObj.text;
 
-    button.addEventListener("click", () => selectAnswer(index));
+    button.dataset.correct = optionObj.isCorrect;
 
-    nextButton.disabled = true;
+    button.addEventListener("click", () =>
+      selectAnswer(optionObj.isCorrect, button),
+    );
 
     choicesContainer.appendChild(button);
   });
+
+  clearInterval(timerInterval);
+  startTimer();
 }
 
-function selectAnswer(selectedIndex) {
-  const correctIndex = quizData[currentQuestionIndex].answer;
-
+function selectAnswer(isCorrect, clickedButton) {
   const buttons = choicesContainer.children;
 
-  for (let i = 0; i < buttons.length; i++) {
-    buttons[i].disabled = true;
+  clearInterval(timerInterval);
 
-    if (i === correctIndex) {
-      buttons[i].style.backgroundColor = "green";
-    } else if (i === selectedIndex) {
-      buttons[i].style.backgroundColor = "red";
-    }
+  for (let btn of buttons) {
+    btn.disabled = true;
+  }
+
+  if (isCorrect) {
+    clickedButton.style.backgroundColor = "lightgreen";
+    score++;
+  } else {
+    clickedButton.style.backgroundColor = "lightcoral";
   }
 
   nextButton.disabled = false;
-
-  if (selectedIndex === correctIndex) {
-    score++;
-  }
 }
 
 nextButton.addEventListener("click", () => {
+  clearInterval(timerInterval);
+
   currentQuestionIndex++;
 
-  if (currentQuestionIndex < quizData.length) {
+  if (currentQuestionIndex < shuffledQuiz.length) {
     loadQuestion();
   } else {
     showScore();
   }
 });
+
+function startTimer() {
+  timeLeft = 10;
+  document.getElementById("timer").textContent = `Time: ${timeLeft}`;
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+
+    document.getElementById("timer").textContent = `Time: ${timeLeft}`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      autoFailQuestion();
+    }
+  }, 1000);
+}
+
+function autoFailQuestion() {
+  const buttons = choicesContainer.children;
+
+  for (let btn of buttons) {
+    btn.disabled = true;
+  }
+
+  // highlight correct answer
+  for (let btn of buttons) {
+    if (btn.dataset.correct === "true") {
+      btn.style.backgroundColor = "lightgreen";
+    }
+  }
+
+  nextButton.disabled = false;
+}
 
 function showScore() {
   // hide quiz completely
@@ -112,12 +173,17 @@ function showScore() {
   scoreContainer.style.display = "block";
 
   // update score text
-  scoreText.textContent = `${score} out of ${quizData.length}`;
+  scoreText.textContent = `${score} out of ${shuffledQuiz.length}`;
 }
+
+let timeLeft = 10; // seconds per question
+let timerInterval = null;
 
 restartButton.addEventListener("click", () => {
   currentQuestionIndex = 0;
   score = 0;
+
+  shuffledQuiz = shuffle([...quizData]);
 
   // show quiz again
   quizContainer.style.display = "block";
@@ -130,3 +196,5 @@ restartButton.addEventListener("click", () => {
 });
 
 loadQuestion();
+clearInterval(timerInterval);
+startTimer();
