@@ -103,6 +103,12 @@ function loadQuestion() {
 
   clearInterval(timerInterval);
   startTimer();
+
+  if (currentQuestionIndex === shuffledQuiz.length - 1) {
+    nextButton.textContent = "Get Score";
+  } else {
+    nextButton.textContent = "Next Question";
+  }
 }
 
 function selectAnswer(isCorrect, clickedButton) {
