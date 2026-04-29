@@ -77,7 +77,6 @@ function loadQuestion() {
   choicesContainer.innerHTML = "";
   nextButton.disabled = true;
 
-  // build answer objects with correctness
   let options = currentQuestion.options.map((option, index) => {
     return {
       text: option,
@@ -106,8 +105,10 @@ function loadQuestion() {
 
   if (currentQuestionIndex === shuffledQuiz.length - 1) {
     nextButton.textContent = "Get Score";
+    nextButton.style.backgroundColor = "rgb(189, 48, 177)"; // change color for final step
   } else {
     nextButton.textContent = "Next Question";
+    nextButton.style.backgroundColor = ""; // reset to default
   }
 }
 
@@ -216,6 +217,8 @@ restartButton.addEventListener("click", () => {
   startContainer.style.display = "block";
 
   clearInterval(timerInterval);
+
+  nextButton.textContent = "Next Question";
 });
 
 clearInterval(timerInterval);
