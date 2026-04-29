@@ -54,6 +54,8 @@ let shuffledQuiz = shuffle([...quizData]);
 let currentQuestionIndex = 0;
 let score = 0;
 
+const startContainer = document.getElementById("start-container");
+const startButton = document.getElementById("start-btn");
 const questionEl = document.getElementById("question");
 const choicesContainer = document.getElementById("choices-container");
 const nextButton = document.getElementById("next");
@@ -62,7 +64,9 @@ const scoreText = document.getElementById("score-text");
 const quizContainer = document.getElementById("quiz-container");
 const restartButton = document.getElementById("restart");
 
-quizContainer.style.display = "block";
+// initial screen setup
+startContainer.style.display = "block";
+quizContainer.style.display = "none"; // hide completely
 scoreContainer.style.display = "none";
 
 function loadQuestion() {
@@ -179,22 +183,29 @@ function showScore() {
 let timeLeft = 10; // seconds per question
 let timerInterval = null;
 
+startButton.addEventListener("click", () => {
+  currentQuestionIndex = 0;
+  score = 0;
+  shuffledQuiz = shuffle([...quizData]);
+
+  startContainer.style.display = "none";
+  quizContainer.style.display = "block"; // 👈 show now
+
+  loadQuestion();
+});
+
 restartButton.addEventListener("click", () => {
   currentQuestionIndex = 0;
   score = 0;
 
   shuffledQuiz = shuffle([...quizData]);
 
-  // show quiz again
-  quizContainer.style.display = "block";
+  quizContainer.style.display = "none"; // 👈 hide again
   scoreContainer.style.display = "none";
+  startContainer.style.display = "block";
 
-  choicesContainer.innerHTML = "";
-  nextButton.disabled = true;
-
-  loadQuestion();
+  clearInterval(timerInterval);
 });
 
-loadQuestion();
 clearInterval(timerInterval);
 startTimer();

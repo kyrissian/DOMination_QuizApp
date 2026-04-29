@@ -153,3 +153,57 @@ h2 {
   margin-left: 60px;
   color: rgb(189, 48, 177);
 }
+
+#start-container {
+  text-align: center;
+  margin-top: 60px;
+}
+
+#start-btn {
+  margin-top: 20px;
+  padding: 15px 30px;
+  background-color: rgb(50, 111, 243);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.quiz-title {
+  font-size: 42px;
+  font-weight: 900;
+  margin-bottom: 30px;
+}
+
+.ready-text {
+  font-size: 25px;
+  font-weight: bolder;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  color: rgb(189, 48, 177);
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* dim quiz container - connected in JS */
+.dimmed {
+  opacity: 0.4;
+  pointer-events: none; /* prevents accidental clicks */
+  transition: opacity 0.4s ease;
+}
+
+/* make start pop */
+.highlight {
+  transform: scale(1.03);
+  transition: all 0.4s ease;
+}
