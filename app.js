@@ -119,6 +119,11 @@ function selectAnswer(isCorrect, clickedButton) {
     score++;
   } else {
     clickedButton.style.backgroundColor = "lightcoral";
+    for (let btn of buttons) {
+      if (btn.dataset.correct === "true") {
+        btn.style.backgroundColor = "lightgreen";
+      }
+    }
   }
 
   nextButton.disabled = false;
