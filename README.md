@@ -8,11 +8,12 @@ A browser-based quiz game that tests your knowledge of JavaScript basics. Questi
 
 ## Features
 
+- Animated start screen with a fade-in effect before the quiz begins
 - 5 JavaScript fundamentals questions
 - Randomized question order and answer choices on every attempt
 - 10-second countdown timer per question — run out of time and the correct answer is revealed automatically
 - Instant visual feedback: green for correct, red for incorrect
-- Score summary screen at the end with a restart option
+- Score summary screen at the end with a restart option that returns you to the start screen
 
 ## How to Run
 
@@ -20,7 +21,7 @@ No installs or dependencies needed — it runs entirely in the browser.
 
 1. Download or clone this repository
 2. Open `index.html` in any modern web browser
-3. The quiz starts automatically!
+3. Click **Start Quiz** to begin!
 
 ## File Structure
 
@@ -33,8 +34,9 @@ No installs or dependencies needed — it runs entirely in the browser.
 
 ## How to Play
 
-1. Read each question and click your answer before the timer hits zero
-2. Your selection is locked in immediately — green means correct, red means incorrect
-3. Click **Next Question** to continue
-4. After all 5 questions, your final score is displayed
-5. Click **Restart Quiz** to shuffle and play again
+1. Click **Start Quiz** on the welcome screen
+2. Read each question and click your answer before the timer hits zero
+3. Your selection is locked in immediately — green means correct, red means incorrect
+4. Click **Next Question** to continue
+5. After all 5 questions, your final score is displayed
+6. Click **Restart Quiz** to return to the start screen and play again
